@@ -1,0 +1,16 @@
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyShopFull\MyShop.Data\bin\Debug\netcoreapp3.1\MyShop.Data.deps.json
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyShopFull\MyShop.Data\bin\Debug\netcoreapp3.1\MyShop.Data.dll
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyShopFull\MyShop.Data\bin\Debug\netcoreapp3.1\MyShop.Data.pdb
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.csprojAssemblyReference.cache
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.AssemblyInfoInputs.cache
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.AssemblyInfo.cs
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.dll
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.pdb
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.Data\bin\Debug\netcoreapp3.1\MyShop.Data.deps.json
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.Data\bin\Debug\netcoreapp3.1\MyShop.Data.dll
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.Data\bin\Debug\netcoreapp3.1\MyShop.Data.pdb
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.csprojAssemblyReference.cache
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.AssemblyInfoInputs.cache
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.AssemblyInfo.cs
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.dll
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.Data\obj\Debug\netcoreapp3.1\MyShop.Data.pdb

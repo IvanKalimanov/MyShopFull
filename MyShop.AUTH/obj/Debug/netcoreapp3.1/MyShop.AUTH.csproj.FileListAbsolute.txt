@@ -1,0 +1,13 @@
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\bin\Debug\netcoreapp3.1\MyShop.AUTH.deps.json
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\bin\Debug\netcoreapp3.1\MyShop.AUTH.dll
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\bin\Debug\netcoreapp3.1\MyShop.Data.dll
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\bin\Debug\netcoreapp3.1\MyShop.Data.pdb
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\obj\Debug\netcoreapp3.1\MyShop.AUTH.csprojAssemblyReference.cache
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\obj\Debug\netcoreapp3.1\MyShop.AUTH.AssemblyInfoInputs.cache
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\obj\Debug\netcoreapp3.1\MyShop.AUTH.AssemblyInfo.cs
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\obj\Debug\netcoreapp3.1\MyShop.AUTH.csproj.CopyComplete
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\bin\Debug\netcoreapp3.1\MyShop.Core.dll
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\bin\Debug\netcoreapp3.1\MyShop.Core.pdb
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\bin\Debug\netcoreapp3.1\MyShop.AUTH.pdb
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\obj\Debug\netcoreapp3.1\MyShop.AUTH.dll
+C:\Users\X1CARBON\Desktop\Зимняя школа\Бэк\MyNewShop\MyShopFull\MyShop.AUTH\obj\Debug\netcoreapp3.1\MyShop.AUTH.pdb

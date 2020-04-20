@@ -1,0 +1,60 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--    <script src="https://unpkg.com/@aspnet/signalr@1.1.0/dist/browser/signalr.min.js"></script> -->
+
+    <title>Login MyShop</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col bg-dark text-white">
+                <a class="navbar-brand"  href="http://localhost:5000/firstPage.html">MyShop</a>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" required value="" />
+            </div>
+            <div>
+                <label for="password">Пароль</label>
+                <input id="password" type="password" name="password" required value="" />
+            </div>
+            <button class="btn btn-outline-success btn-block" id="enter">Войти</button>
+            
+             <a class="btn btn-outline-success btn-block" href="http://localhost:5000/registration.html">
+            Регистрация
+             </a>
+        </div>
+
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    // если в сессии уже сохранен токен, то переходим на страницу чата
+if (sessionStorage.getItem("accesstoken") != null)
+document.location.href = "http://localhost:5000/index.html";
+
+$('#enter').click(function () { // при клике на кнопку производим вход
+let email = $('#email').val(); // вытаскиваем email
+let password = $('#password').val(); // вытаскиваем пароль
+$.ajax(
+    {
+        type: 'POST',
+        url: 'http://localhost:5000/api/login',
+        contentType: "application/json; charset=utf-8",
+        data: `{ "email": "${email}", "password": "${password}" }`,
+        success: function (data, textStatus) {
+            sessionStorage.setItem("accesstoken", data.data.accessToken);
+            sessionStorage.setItem("refreshtoken", data.data.refreshToken);
+           document.location.href = "http://localhost:5000/index.html";
+        }
+    });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,600 @@
+﻿<!doctype html>
+ <html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="js/signalr.min.js"></script>
+    <title>My Shop</title>
+  </head>
+  <body>
+      <style>.pleaseWork {
+    height:200px;
+    overflow:auto;
+}</style>
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col bg-dark text-white">
+                  <a class="navbar-brand" href="http://localhost:5000/firstPage.html">My Shop</a>
+                  <a href="http://localhost:5000/lk.html"><span class="bd-light float-right" id="userName"></span></a>
+                  <button class="btn btn-primary float-right" id="exit">Выйти</button>
+              </div>
+          </div>
+          <div class="row mt-2">
+              <div class="col-3">
+                  <button class="btn btn-outline-info btn-block mb-2" id="all">Все</button>
+                  <div id="category">
+                  </div>
+                  <button class="btn btn-outline-success btn-block mt-2" id="newCtg">Новая категория</button>
+                  <button class="btn btn-outline-success btn-block mt-2" id="newProd">Новый товар</button>
+              </div>
+              <div class="col-9">
+                  <div class="row" id="content">
+                  </div>
+              </div>
+          </div>
+
+      </div>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      <script>
+          
+          function category(id, title) {
+              return `<div class="btn btn-outline-info btn-block ctg" id="${id}">
+                                    ${title}
+                                    <button class="deleteCategory" data-id="${id}">&#10008; </button>
+                                    <button class="updateCategory"  data-title="${title}" data-id="${id}">&#9998; </button>
+                                    </div>`;
+          };
+
+          function card(id, name, description, price) {
+              return `<div class="card col-3 mx-4 my-2" style="width:100%" ">
+                                <img class="card-img-top mt-2" src="img/photo.jpg" alt="Card image" style="width:100%">
+                                <div class="card-body">
+                                    <h4 class="card-title">${name}</h4>
+                                    <p class="card-text">${description}</p>
+                                    <p class="card-price">${price} руб. </p>
+                                    <button class="deleteProduct" data-id="${id}">	&#10008; </button>
+                                    <button class="updateProduct" data-id="${id}" data-title="${name}"
+                                    data-description="${description}" data-price="${price}">&#9998; </button>
+                                    <button type="button" class="btn btn-primary openComs" data-id="${id}">
+                                            Комментарии
+                                    </button>
+                                    <button type="button" class="btn btn-primary addToCart"  data-id="${id}">
+                                            В корзину
+                                    </button>
+                                    <div class="modal fade" id="${id}" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="staticBackdropLabel">Комментарии к товару</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="card pleaseWork" id="card${id}"></div>
+                                            <label for="comment-text">Ваш комментарий</label>
+                                            <input type="text" ><button  class="btn btn-outline-success btn-block sendMsg" data-id="${id}" data-title="${name}" >Отправить</button>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
+                                            </div>
+                                        </div>`;
+
+          };
+
+          function createCategoryForm() {
+              return `<div class="col-12 text-center">
+                                        <h5>Создать новую категорию</h5>
+                                    </div>
+                                    <div class="col-12">
+                                    <form name="createForm">
+                                        <div class="form-group">
+                                            <label>Название</label>
+                                            <input class="form-control" name="title" />
+                                        </div>
+                                    </form>
+                                    <button class="btn btn-outline-success btn-block" id="createCategory">Добавить</button>
+                                    </div`;
+          }
+
+          function updateCategoryForm(id, name) {
+              return `<div class="col-12 text-center">
+                                        <h5>Редактировать категорию</h5>
+                                    </div>
+                                    <div class="col-12">
+                                    <form name="updateCatForm">
+                                        <div class="form-group">
+                                            <label>Название</label>
+                                            <input class="form-control" name="title" value="${name}" />
+                                        </div>
+                                    </form>
+                                    <button class="btn btn-outline-success btn-block" data-id="${id}" id="updateCategory">Изменить</button>
+                                    </div`;
+          }
+
+          function createProductForm() {
+              return `<div class="col-12 text-center">
+                                        <h5>Добавить новый товар</h5>
+                                    </div>
+                                    <div class="col-12">
+                                    <form name="createProduct">
+                                        <div class="form-group">
+                                            <label>Название</label>
+                                            <input class="form-control" name="title" />
+                                            <label>Описание</label>
+                                            <input class="form-control" name="description"/>
+                                            <label> Цена </label>
+                                            <input class="form-control" name="price"/>
+                                            <label>Категория</label>
+                                            <select class="form-control" id="chooseCat" name="categoryName">
+
+                                            </select>
+                                        </div>
+                                    </form>
+                                    <button class="btn btn-outline-success btn-block" id="createProduct">Добавить</button>
+                                    </div`;
+          }
+
+          function updateProductForm(id, title, description, price) {
+              return `<div class="col-12 text-center">
+                                        <h5>Редактировать товар</h5>
+                                    </div>
+                                    <div class="col-12">
+                                    <form name="updateProduct" ">
+                                        <div class="form-group">
+                                            <label>Название</label>
+                                            <input class="form-control" name="title" value="${title}"/>
+                                            <label>Описание</label>
+                                            <input class="form-control" name="description" value="${description}"/>
+                                            <label> Цена </label>
+                                            <input class="form-control" name="price" value="${price}"/>
+                                            <label>Категория</label>
+                                            <select class="form-control" id="chooseCat" name="categoryName">
+
+                                            </select>
+                                        </div>
+                                    </form>
+                                    <button class="btn btn-outline-success btn-block" data-id="${id}" id="updateProduct">Изменить</button>
+                                    </div`;
+          }
+      </script>
+      <script>
+          let b64DecodeUnicode = str =>
+              decodeURIComponent(
+                  Array.prototype.map.call(atob(str), c =>
+                      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                  ).join(''))
+
+          let parseJwt = token =>
+              JSON.parse(
+                  b64DecodeUnicode(
+                      token.split('.')[1].replace('-', '+').replace('_', '/')
+                  )
+              )
+          function refreshToken() {
+              $.ajax(
+                  {
+                      type: 'POST',
+                      url: `http://localhost:5000/api/refreshtoken`,
+                      dataType: "json",
+                      contentType: "application/json; charset=utf-8",
+                      data: `{"accesstoken":"${sessionStorage.getItem("accesstoken")}",
+                                "refreshtoken":"${sessionStorage.getItem("refreshtoken")}"}`,
+                      success: function (data, textStatus) {
+                          sessionStorage.setItem("accesstoken", data.data.accessToken)
+                          sessionStorage.setItem("refreshtoken", data.data.refreshToken)
+                      }
+                  });
+          }
+          function validateToken() {
+               console.log(sessionStorage.getItem("accesstoken"))
+              let token = parseJwt(sessionStorage.getItem("accesstoken"))
+              let d = new Date()
+              if (token.exp >= d.getTime / 1000) refreshToken();
+              console.log(sessionStorage.getItem("accesstoken"))
+
+          }
+
+          $('#userName').html(
+              parseJwt(sessionStorage.getItem("accesstoken"))["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"])
+
+      </script>
+      <script>
+          function getAllCategories()
+{      
+    $.ajax(
+    {
+        type: 'GET',
+        url: 'http://localhost:5000/api/category',
+        dataType : "json", 
+        success: function (data, textStatus)
+        { 
+            let cat = "";
+            data.forEach(function(item)
+            {
+                cat = cat + category(item.id, item.title);
+            });
+            $('#category').html(cat);
+        } 
+    });
+    
+}; 
+
+function getAllCategoriesInOptions(){
+    $.ajax(
+        {
+            type: 'GET',
+            url: 'http://localhost:5000/api/category',
+            dataType : "json", 
+            success: function (data, textStatus)
+            { 
+                data.forEach(function (item){
+
+                    $(`<option id="${item.id}" value="${item.title}">${item.title}</option>`).appendTo($('#chooseCat'))
+                })
+                
+            } 
+        });
+}
+
+function createCategory(title)
+{
+    $.ajax(
+    {
+        type: 'POST',
+        url: 'http://localhost:5000/api/category',
+        dataType : "json",
+        contentType: "application/json; charset=utf-8",
+        data: `{ "title": "${title}" }`,
+            beforeSend: function (request) { // в хедерах передаем токен
+                validateToken();
+            request.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem("accesstoken")}`);
+        },
+        success: function (data, textStatus)
+        { 
+            getAllProducts();
+            getAllCategories();
+        }, 
+        error: function (jqXHR, e){
+            if (jqXHR.status == 403)
+            alert("Нет достаточных полномочий!(Error 403)")
+        }        
+    });
+};
+
+function deleteCategory(id){
+    $.ajax({
+        type: 'Delete',
+        url: `http://localhost:5000/api/category/${id}`,
+        dataType : "json",
+        contentType:"application/json; charset=utf-8",
+        data: `{"id": "${id}"}`,
+        beforeSend: function (request) { // в хедерах передаем токен
+            validateToken();
+            request.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem("accesstoken")}`);
+        },
+        success: function(data, textStatus){
+            getAllProducts();
+            getAllCategories();
+        },
+        error: function (jqXHR, e){
+            if (jqXHR.status == 403)
+            alert("Нет достаточных полномочий!(Error 403)")
+        } 
+    })
+}
+
+function updateCategory(id, name){
+    $.ajax({
+        type:'PUT',
+        url: `http://localhost:5000/api/category`,
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        data: `{"id": "${id}", "title": "${name}"}`,
+        beforeSend: function (request) { // в хедерах передаем токен
+            validateToken()
+            request.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem("accesstoken")}`);
+        },
+        success: function(data, textStatus){
+            getAllProducts();
+            getAllCategories();
+        },
+        error: function (jqXHR, ex){
+            if (jqXHR.status == 403)
+                alert("Нет достаточных полномочий!(Error 403)")
+        } 
+
+    })
+}
+      </script>
+      <script>function formComment(comment) {
+              return `<span><b>${comment.nameOfSender}:</b> ${comment.text}</span><br>`
+          }
+          function getProductComments(id) {
+              $.ajax(
+                  {
+                      type: 'GET',
+                      url: `http://localhost:5000/api/comments/${id}`,
+                      dataType: "json",
+                      success: function (data, textStatus) {
+                          let cat = "";
+                          data.forEach(function (item) {
+                              cat = cat + formComment(item);
+                          });
+                          $(`#card${id}`).html(cat)
+                      }
+                  });
+          }
+          function openModal(id) {
+              $(`#${id}`).modal('show')
+              getProductComments(id)
+          }
+          $('#content').delegate('.openComs', 'click', function () {
+                openModal(this.getAttribute('data-id'))
+                getProductComments(this.getAttribute('data-id'))
+                  
+
+          })
+          let hubUrl = 'http://localhost:5000/authchat'; //ссылка, по которому будем обращаться к хабу
+          validateToken()
+          let connection = new signalR.HubConnectionBuilder()  //строим соединение с хабом
+              .withUrl(hubUrl,  { accessTokenFactory: () => sessionStorage.getItem('accesstoken') })                      // в нашем случае будет использована технология web-socket
+              .build();
+
+          //здесь мы задаем функцию, в которую будет отправлять новые данные хаб
+          connection.on('SendCommentAuth', function (nameOfSender, text) {//первый параметр дублирует имя в методе отсылки хаба
+              // в функции параметры - параметры, которые мы ожидаем получить от хаба
+              $('.show .modal-dialog .modal-body .card')[0].insertAdjacentHTML('beforeend',`<span><b>${nameOfSender}: </b> ${text}</span><br>`);
+              //вставляем на страницу наши сообщения
+
+          });
+          connection.start(); // с этого момента мы пытаемся наладить соединение
+
+          $('#content').delegate('.sendMsg', 'click', function () {
+              // при клике на кнопку отсылаем сообщение
+
+              let txt = this.previousSibling.value; // вытаскиваем текст сообщения
+              let name = document.getElementById('userName').innerHTML; // вытаскиваем имя
+              this.previousSibling.value = ''; // обнуляем текст сообщения
+              let id = this.getAttribute('data-id')
+              let title = this.getAttribute('data-title')
+              $.ajax(
+                  {
+                      type: 'POST',
+                      url: 'http://localhost:5000/api/chat/sendcommentauth',
+                      dataType: "json",
+                      contentType: "application/json; charset=utf-8",
+                      beforeSend: function (request) {
+                         validateToken();
+                          request.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem("accesstoken")}`);
+                      },
+                      data: `{ "productId": "${id}",
+                                    "productName": "${title}","text": "${txt}", "nameOfSender": "${name}" }`,
+                      success: function (data, textStatus) {
+                          console.log(data); //выведем в консоль результат
+                      }
+                  });
+          });
+      </script>
+      <script>
+          function getAllProducts() {
+              $.ajax(
+                  {
+                      type: 'GET',
+                      url: 'http://localhost:5000/api/product',
+                      dataType: "json",
+                      success: function (data, textStatus) {
+                          let products = "";
+                          data.forEach(function (item) {
+                              products = products + card(item.id, item.name, item.description, item.price);
+                          });
+                          $('#content').html(products);
+                      }
+                  });
+          };
+
+          function getProductsByCategory(id) {
+              $.ajax(
+                  {
+                      type: 'GET',
+                      url: `http://localhost:5000/api/product/category/${id}`,
+                      dataType: "json",
+                      success: function (data, textStatus) {
+                          let products = "";
+                          data.forEach(function (item) {
+                              products = products + card(item.id, item.name, item.description, item.price);
+                          });
+                          $('#content').html(products);
+                      }
+                  });
+          };
+
+          function createProduct(name, description, price, categoryId) {
+              $.ajax({
+                  type: 'POST',
+                  url: 'http://localhost:5000/api/product',
+                  dataType: "json",
+                  contentType: "application/json; charset=utf-8",
+                  data: `{"name": "${name}", "description": "${description}",
+                                 "price": ${parseInt(price)}, "categoryId": "${categoryId}"}`,
+                  beforeSend: function (request) { // в хедерах передаем токен
+                      validateToken();
+                      request.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem("accesstoken")}`);
+                  },
+                  success: function (data, textStatus) {
+                      getAllProducts();
+                      getAllCategories();
+                  },
+                  error(jqXHR, ex) {
+                      if (jqXHR.status == 403)
+                          alert("Нет достаточных полномочий!(Error 403)")
+                  }
+              })
+          }
+
+          function deleteProduct(id) {
+              $.ajax({
+                  type: 'Delete',
+                  url: `http://localhost:5000/api/product/${id}`,
+                  dataType: "json",
+                  contentType: "application/json; charset=utf-8",
+                  data: `{"id": "${id}"}`,
+                  beforeSend: function (request) { // в хедерах передаем токен
+                      validateToken();
+                      request.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem("accesstoken")}`);
+                  },
+                  success: function (data, textStatus) {
+                      getAllProducts();
+                      getAllCategories();
+                  },
+                  error(jqXHR, ex) {
+                      if (jqXHR.status == 403)
+                          alert("Нет достаточных полномочий!(Error 403)")
+                  }
+              })
+          }
+
+          function updateProduct(id, name, description, price, categoryId) {
+              $.ajax({
+                  method: 'Put',
+                  url: `http://localhost:5000/api/product`,
+                  dataType: "json",
+                  contentType: "application/json; charset=utf-8",
+                  data: `{"id": "${id}", "name": "${name}", "price":${parseInt(price)},
+                                "description":"${description}", "categoryId":"${categoryId}"}`,
+                  beforeSend: function (request) { 
+                      validateToken();
+                      request.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem("accesstoken")}`);
+                  },
+                  success: function (data, textStatus) {
+                      getAllProducts();
+                      getAllCategories();
+                  },
+                  error(jqXHR, ex) {
+                      if (jqXHR.status == 403)
+                          alert("Нет достаточных полномочий!(Error 403)")
+                  }
+              })
+          }
+      </script>
+      <script src="script/onStart.js"></script>
+
+
+
+      <script>
+          $('#all').click(getAllProducts);
+
+          $("#category").delegate(".ctg", "click", function (e) {
+              getProductsByCategory(e.target.id);
+          });
+
+          $('#newCtg').click(function () {
+              $('#content').html(createCategoryForm());
+          });
+
+          $('#newProd').click(function () {
+              $('#content').html(createProductForm());
+              getAllCategoriesInOptions();
+          })
+
+          $('#content').delegate('#createProduct', 'click', function () {
+
+              let a = document.forms.createProduct.categoryName.value
+              let b = ""
+              for (var i = 1;
+                  i < document.forms.createProduct.categoryName.childNodes.length && b == ""; i++) {
+                  if (document.forms.createProduct.categoryName.childNodes[i].value == a)
+                      b = document.forms.createProduct.categoryName.childNodes[i].id;
+              }
+
+              createProduct(document.forms.createProduct.title.value,
+                  document.forms.createProduct.description.value,
+                  document.forms.createProduct.price.value,
+                  b
+              )
+          });
+
+          $('#content').delegate("#createCategory", "click", function () {
+              createCategory(document.forms.createForm.title.value);
+          });
+
+          $('#content').delegate(".deleteProduct", "click", function () {
+              deleteProduct(this.getAttribute('data-id'));
+          })
+
+          $('#category').delegate(".deleteCategory", "click", function () {
+              deleteCategory(this.getAttribute('data-id'));
+          })
+
+          $('#category').delegate(".updateCategory", "click", function (e) {
+              $('#content').html(updateCategoryForm(this.getAttribute('data-id'), this.getAttribute('data-title')))
+          })
+
+          $('#content').delegate("#updateCategory", "click", function () {
+              updateCategory(this.getAttribute('data-id'), document.forms.updateCatForm.title.value)
+          })
+
+          $('#content').delegate(".updateProduct", "click", function () {
+              $('#content').html(updateProductForm(this.getAttribute('data-id'),
+                  this.getAttribute('data-title'), this.getAttribute('data-description'), this.getAttribute('data-price')))
+              getAllCategoriesInOptions();
+          })
+          $('#exit').click(function () {
+              console.log("exit");
+              sessionStorage.removeItem("accesstoken");
+              document.location.href = "http://localhost:5000/firstPage.html";
+          })
+
+          $('#content').delegate("#updateProduct", "click", function () {
+              let a = document.forms.updateProduct.categoryName.value
+              let b = ""
+              for (var i = 1;
+                  i < document.forms.updateProduct.categoryName.childNodes.length && b == ""; i++) {
+                  if (document.forms.updateProduct.categoryName.childNodes[i].value == a)
+                      b = document.forms.updateProduct.categoryName.childNodes[i].id;
+              }
+              console.log(this.getAttribute('data-id'), document.forms.updateProduct.title.value,
+                  document.forms.updateProduct.description.value, document.forms.updateProduct.price.value, b)
+              updateProduct(this.getAttribute('data-id'), document.forms.updateProduct.title.value,
+                  document.forms.updateProduct.description.value, document.forms.updateProduct.price.value, b)
+          })
+             function getCartData(){
+          return JSON.parse(localStorage.getItem('cart'));
+        }
+        // Записываем данные в LocalStorage
+        function setCartData(o){
+          localStorage.setItem('cart', JSON.stringify(o));
+          return false;
+        }
+          function addToCart(id, title, description, price) {
+            
+              var cartData = getCartData() || {}  // получаем данные корзины или создаём новый объект, если данных еще нет
+          if(cartData.hasOwnProperty(id)){ // если такой товар уже в корзине, то добавляем +1 к его количеству
+            cartData[id][3] += 1;
+          } else { // если товара в корзине еще нет, то добавляем в объект
+              cartData[id] = [title, description, price, 1];
+          }
+          setCartData(cartData)// Обновляем данные в LocalStorage
+
+         return false;
+        }
+          $("#content").delegate(".addToCart", 'click', function () {
+              
+              addToCart(this.getAttribute('data-id'), this.parentNode.children[0].innerHTML,
+                  this.parentNode.children[1].innerHTML, this.parentNode.children[2].innerHTML)
+    })
+      </script>
+      
+
+  </body>
+</html>  

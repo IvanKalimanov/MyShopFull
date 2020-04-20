@@ -1,0 +1,164 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="js/signalr.min.js"></script>
+    <title>My Shop</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col bg-dark text-white">
+                <a class="navbar-brand" href="http://localhost:5000/firstPage.html">My Shop</a>
+                <span class="bd-light float-right" id="userName"></span>
+         
+                <button class="btn btn-primary float-right" id="exit">Выйти</button>
+            </div>
+        </div>
+        <div class="row">
+            
+            <div class="col-9" id="content">
+                
+            </div>
+            <div class="col-3">
+                <div class="card">
+                    <span id="identityName"></span>
+
+                </div>
+                <button class="btn btn-primary" id="clearCart">Очистить корзину</button>
+                <form class="form from-group card" name="changePasswordForm">
+                    <label for="oldPassword">Старый пароль</label>
+                    <input type="password" name="oldPassword" id="oldPassword" />
+                    <label for="newPassword">Новый пароль</label>
+                    <input type="password" name="newPassword" id="newPassword" />
+                    <button type="button" class="btn btn-primary" id="chPassBut">Изменить</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+        let b64DecodeUnicode = str =>
+              decodeURIComponent(
+                  Array.prototype.map.call(atob(str), c =>
+                      '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+                  ).join(''))
+
+          let parseJwt = token =>
+              JSON.parse(
+                  b64DecodeUnicode(
+                      token.split('.')[1].replace('-', '+').replace('_', '/')
+                  )
+            )
+        let email = parseJwt(sessionStorage.getItem("accesstoken"))["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"]
+        $('#userName').html(email)
+        function getUser(email) {
+            $.ajax(
+                {
+                    type: 'GET',
+                    url: `http://localhost:5000/api/user/email/${email}`,
+                    dataType: "json",
+                    success: function (data, textStatus) {
+                         $('#identityName').html(data.name)
+                    }
+                });
+        }
+           
+          function refreshToken() {
+              $.ajax(
+                  {
+                      type: 'POST',
+                      url: `http://localhost:5000/api/refreshtoken`,
+                      dataType: "json",
+                      contentType: "application/json; charset=utf-8",
+                      data: `{"accesstoken":"${sessionStorage.getItem("accesstoken")}",
+                                "refreshtoken":"${sessionStorage.getItem("refreshtoken")}"}`,
+                      success: function (data, textStatus) {
+                          sessionStorage.setItem("accestoken", data.data.accessToken)
+                          sessionStorage.setItem("refreshtoken", data.data.refreshToken)
+                      }
+                  });
+          }
+          function validateToken() {
+               console.log(sessionStorage.getItem("accesstoken"))
+              let token = parseJwt(sessionStorage.getItem("accesstoken"))
+              let d = new Date()
+              if (token.exp >= d.getTime / 1000) refreshToken();
+              console.log(sessionStorage.getItem("accesstoken"))
+
+          }
+        function changePassword(changePasswordModel) {
+                $.ajax(
+                {
+                    type: 'POST',
+                    url: 'http://localhost:5000/api/user/changepassword',
+                    dataType : "json",
+                        contentType: "application/json; charset=utf-8",
+                        data: `{ "email": "${changePasswordModel.email}" , 
+                                "oldPassword":"${changePasswordModel.oldPass}", 
+                                  "newPassword":"${changePasswordModel.newPass}"}`,
+                        beforeSend: function (request) { // в хедерах передаем токен
+                            validateToken();
+                            request.setRequestHeader("Authorization", `Bearer ${sessionStorage.getItem("accesstoken")}`);
+                    },
+                    success: function (data, textStatus)
+                    { 
+                        alert("Пароль изменён")
+                    }, 
+                    error: function (jqXHR, e){
+                        alert("Ошибка измения пароля!!!")
+                    }        
+                });
+        }
+        $("#chPassBut").click(function () {
+            let oldPass = document.forms.changePasswordForm.oldPassword.value
+            let newPass = document.forms.changePasswordForm.newPassword.value
+            let model = { "email": email, "oldPass": oldPass, "newPass": newPass }
+            changePassword(model)
+            document.forms.changePasswordForm.oldPassword.value = ''
+            document.forms.changePasswordForm.newPassword.value = ''
+        })
+        getUser(email)
+
+        function getCartData(){
+              return JSON.parse(localStorage.getItem('cart'));
+            }
+        function showCart() {
+            var cartData = getCartData()
+            container = ''
+            if (cartData != null) {
+                for (var item in cartData) {
+                    container += `<div class="card col-3 mx-4 my-2" style="width:100%">
+                                <div class="card-body">`
+                    for (var i = 0; i < cartData[item].length; i++) {
+                        container += cartData[item][i]
+                    }
+                    container += ` </div>   </div>`
+                }
+                $('#content').html(container)
+            } else
+                $('#content').html('<h4>Корзина пуста</h4>')
+            return false;
+        }
+        showCart()
+        $('#clearCart').click(function () {
+            localStorage.removeItem('cart')
+            $('#content').html('Корзина очищена')
+        })
+        $('#exit').click(function () {
+              console.log("exit");
+              sessionStorage.removeItem("accesstoken");
+              document.location.href = "http://localhost:5000/firstPage.html";
+          })
+    </script>
+</body>
+</html>

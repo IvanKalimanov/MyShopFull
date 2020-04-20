@@ -1,0 +1,73 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+    <title>Registration page</title>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col bg-dark text-white">
+                <a class="navbar-brand"  href="http://localhost:5000/firstPage.html">MyShop</a>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <form name="regForm">
+            <div>
+                <label for="email">Email</label>
+                <input id="email" type="email" required name="email" value="" />
+            </div>
+            <div>
+                <label for="password">Пароль</label>
+                <input id="password" type="password" required name="password" value="" />
+            </div>
+            <div>
+                <label for="name">Имя</label>
+                <input id="name" type="text" required name="name"/>
+            </div>
+            <div> 
+                <label for="">Доступ</label>
+                <input type="radio" name="role" id="us" value="user">
+                <label for="us">USER</label>
+                <input type="radio" name="role" id="ad" value="admin">
+                <label for="ad">ADMIN</label>
+            </div>
+            </form>
+            <button class="btn btn-outline-success btn-block" id="register">Регистрация</button>
+            <div id="messageForUser"></div>
+        </div>
+
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $('#register').click(function () { // при клике на кнопку производим регистрацию
+    let email = $('#email').val(); // вытаскиваем email
+    let password = $('#password').val(); // вытаскиваем пароль
+    let name  = $('#name').val();
+    let role = document.forms.regForm.role.value;
+    $.ajax(
+        {
+        type: 'POST',
+        url:   `http://localhost:5000/api/register/${role}`,
+        contentType: "application/json; charset=utf-8",
+        data: `{ "email": "${email}", "name": "${name}", "password": "${password}" }`,
+        success: function (data, textStatus) {
+            $("#messageForUser").html(`Вам отправлено письмо с ссылкой на подтверждение email.
+                    Чтобы воспользоваться сайтом с правами авторизированного пользователя, перейдите по ней`)
+            $('#email').val() = ''
+            $('#password').val() = ''
+             $('#name').val() = ''
+            },
+            error: function () {
+                 $("#messageForUser").html("Произошла ошибка регистрации")
+            }
+    });
+    });
+    </script>
+</body>
+</html>

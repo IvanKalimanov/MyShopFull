@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Страница подтверждения</title>
+</head>
+<body>
+    Подтверждение email
+    <div id="content"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        let conftoken = window.location.search.slice(11)
+        let id = window.location.hash.slice(1)
+        function confirmEmail(id, conftoken){
+            $.ajax(
+                {
+                    type: 'POST',
+                    url: 'http://localhost:5000/api/confirmemail',
+                    dataType: "json", 
+                    contentType: "application/json; charset=utf-8",
+                    data: `{ "userId": "${id}", "token":"${conftoken}" }`,
+                    success: function (data, textStatus)
+                    {
+                        console.log(data.data.accessToken)
+                          sessionStorage.setItem("accesstoken", data.data.accessToken);
+                           sessionStorage.setItem("refreshtoken", data.data.refreshToken);
+                          $('#content').html('<a href="http://localhost:5000/index.html">Успешно подтвеждено. Перейдите по ссылке</a>')
+                
+                    },
+
+                    error: function (jqXHR, e) {
+                        if (jqXHR.status == 400)
+                            alert("Ошибка подтверждения. Возможно, вы уже подтверждали email!")
+                    }
+                });
+        }
+        confirmEmail(id, conftoken)
+    </script>
+</body>
+</html>
