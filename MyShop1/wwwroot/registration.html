@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col bg-dark text-white">
-                <a class="navbar-brand"  href="http://localhost:5000/firstPage.html">MyShop</a>
+                <a class="navbar-brand"  href="http://130.193.48.28/firstPage.html">MyShop</a>
             </div>
         </div>
         <div class="row mt-4">
@@ -45,6 +45,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
+    let constr = 'http://130.193.48.28/'
     $('#register').click(function () { // при клике на кнопку производим регистрацию
     let email = $('#email').val(); // вытаскиваем email
     let password = $('#password').val(); // вытаскиваем пароль
@@ -53,7 +54,7 @@
     $.ajax(
         {
         type: 'POST',
-        url:   `http://localhost:5000/api/register/${role}`,
+        url:   `${constr}api/register/${role}`,
         contentType: "application/json; charset=utf-8",
         data: `{ "email": "${email}", "name": "${name}", "password": "${password}" }`,
         success: function (data, textStatus) {

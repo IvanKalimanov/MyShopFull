@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col bg-dark text-white">
-                <a class="navbar-brand" href="http://localhost:5000/firstPage.html">My Shop</a>
+                <a class="navbar-brand" href="http://130.193.48.28/firstPage.html">My Shop</a>
                 <span class="bd-light float-right" id="userName"></span>
          
                 <button class="btn btn-primary float-right" id="exit">Выйти</button>
@@ -47,6 +47,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script>
+        let constr = 'http://130.193.48.28/'
         let b64DecodeUnicode = str =>
               decodeURIComponent(
                   Array.prototype.map.call(atob(str), c =>
@@ -65,7 +66,7 @@
             $.ajax(
                 {
                     type: 'GET',
-                    url: `http://localhost:5000/api/user/email/${email}`,
+                    url: `${constr}api/user/email/${email}`,
                     dataType: "json",
                     success: function (data, textStatus) {
                          $('#identityName').html(data.name)
@@ -77,7 +78,7 @@
               $.ajax(
                   {
                       type: 'POST',
-                      url: `http://localhost:5000/api/refreshtoken`,
+                      url: `${constr}api/refreshtoken`,
                       dataType: "json",
                       contentType: "application/json; charset=utf-8",
                       data: `{"accesstoken":"${sessionStorage.getItem("accesstoken")}",
@@ -100,7 +101,7 @@
                 $.ajax(
                 {
                     type: 'POST',
-                    url: 'http://localhost:5000/api/user/changepassword',
+                    url: `${constr}api/user/changepassword`,
                     dataType : "json",
                         contentType: "application/json; charset=utf-8",
                         data: `{ "email": "${changePasswordModel.email}" , 
@@ -157,7 +158,7 @@
         $('#exit').click(function () {
               console.log("exit");
               sessionStorage.removeItem("accesstoken");
-              document.location.href = "http://localhost:5000/firstPage.html";
+              document.location.href = `${constr}firstPage.html`;
           })
     </script>
 </body>

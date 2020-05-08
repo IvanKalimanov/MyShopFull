@@ -12,7 +12,7 @@
       <div class="container-fluid">
           <div class="row">
               <div class="col bg-dark text-white">
-                  <a class="navbar-brand" href="http://localhost:5000/firstPage.html">My Shop</a>
+                  <a class="navbar-brand" href="http://130.193.48.28/firstPage.html">My Shop</a>
                   <a class="btn btn-primary float-right" href="login.html" id="logorReg">Войти</a>
               </div>
           </div>
@@ -39,7 +39,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
       <script>
-         
+         let constr = 'http://130.193.48.28/'
           function category(id, title) {
               return `<div class="btn btn-outline-info btn-block ctg" id="${id}">
                   ${title}
@@ -171,7 +171,7 @@
                $.ajax(
                 {
                     type: 'GET',
-                    url: `http://localhost:5000/api/comments/${id}`,
+                    url: `${constr}api/comments/${id}`,
                     dataType : "json", 
                     success: function (data, textStatus)
                     { 
@@ -193,7 +193,7 @@
                   
 
           })
-    let hubUrl = 'http://localhost:5000/chat'; //ссылка, по которому будем обращаться к хабу
+    let hubUrl = `${constr}chat`; //ссылка, по которому будем обращаться к хабу
           let connection = new signalR.HubConnectionBuilder()  //строим соединение с хабом
               .withUrl(hubUrl)                      // в нашем случае будет использована технология web-socket
               .build();
@@ -217,7 +217,7 @@
               $.ajax(
                   {
                       type: 'POST',
-                      url: 'http://localhost:5000/api/chat/sendcomment',
+                      url: `${constr}api/chat/sendcomment`,
                       dataType: "json",
                       contentType: "application/json; charset=utf-8",
                       data: `{ "productId": "${id}",
@@ -233,7 +233,7 @@
               $.ajax(
                   {
                       type: 'GET',
-                      url: 'http://localhost:5000/api/product',
+                      url: `${constr}api/product`,
                       dataType: "json",
                       success: function (data, textStatus) {
                           let products = "";
@@ -249,7 +249,7 @@
               $.ajax(
                   {
                       type: 'GET',
-                      url: `http://localhost:5000/api/product/category/${id}`,
+                      url: `${constr}api/product/category/${id}`,
                       dataType: "json",
                       success: function (data, textStatus) {
                           let products = "";
@@ -264,7 +264,7 @@
           function createProduct(name, description, price, categoryId) {
               $.ajax({
                   type: 'POST',
-                  url: 'http://localhost:5000/api/product',
+                  url: `${constr}api/product`,
                   dataType: "json",
                   contentType: "application/json; charset=utf-8",
                   data: `{"name": "${name}", "description": "${description}",
@@ -286,7 +286,7 @@
           function deleteProduct(id) {
               $.ajax({
                   type: 'Delete',
-                  url: `http://localhost:5000/api/product/${id}`,
+                  url: `${constr}api/product/${id}`,
                   dataType: "json",
                   contentType: "application/json; charset=utf-8",
                   data: `{"id": "${id}"}`,
@@ -307,7 +307,7 @@
           function updateProduct(id, name, description, price, categoryId) {
               $.ajax({
                   method: 'Put',
-                  url: `http://localhost:5000/api/product`,
+                  url: `${constr}api/product`,
                   dataType: "json",
                   contentType: "application/json; charset=utf-8",
                   data: `{"id": "${id}", "name": "${name}", "price":${parseInt(price)},
@@ -387,7 +387,7 @@ $('#content').delegate(".updateProduct", "click", function () {
 $('#exit').click(function () {
     console.log("exit");
     sessionStorage.removeItem("token");
-    document.location.href = "https://localhost:5000/login.html";
+    document.location.href = `${constr}login.html`;
 })
 
 $('#content').delegate("#updateProduct", "click", function () {

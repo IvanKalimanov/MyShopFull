@@ -42,7 +42,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
       <script>
-          
+          let constr = 'http://130.193.48.28/'
           function category(id, title) {
               return `<div class="btn btn-outline-info btn-block ctg" id="${id}">
                                     ${title}
@@ -185,7 +185,7 @@
               $.ajax(
                   {
                       type: 'POST',
-                      url: `http://localhost:5000/api/refreshtoken`,
+                      url: `${constr}api/refreshtoken`,
                       dataType: "json",
                       contentType: "application/json; charset=utf-8",
                       data: `{"accesstoken":"${sessionStorage.getItem("accesstoken")}",
@@ -215,7 +215,7 @@
     $.ajax(
     {
         type: 'GET',
-        url: 'http://localhost:5000/api/category',
+        url: `${constr}api/category`,
         dataType : "json", 
         success: function (data, textStatus)
         { 
@@ -234,7 +234,7 @@ function getAllCategoriesInOptions(){
     $.ajax(
         {
             type: 'GET',
-            url: 'http://localhost:5000/api/category',
+            url: `${constr}api/category`,
             dataType : "json", 
             success: function (data, textStatus)
             { 
@@ -252,7 +252,7 @@ function createCategory(title)
     $.ajax(
     {
         type: 'POST',
-        url: 'http://localhost:5000/api/category',
+        url: `${constr}api/category`,
         dataType : "json",
         contentType: "application/json; charset=utf-8",
         data: `{ "title": "${title}" }`,
@@ -275,7 +275,7 @@ function createCategory(title)
 function deleteCategory(id){
     $.ajax({
         type: 'Delete',
-        url: `http://localhost:5000/api/category/${id}`,
+        url: `${constr}api/category/${id}`,
         dataType : "json",
         contentType:"application/json; charset=utf-8",
         data: `{"id": "${id}"}`,
@@ -297,7 +297,7 @@ function deleteCategory(id){
 function updateCategory(id, name){
     $.ajax({
         type:'PUT',
-        url: `http://localhost:5000/api/category`,
+        url: `${constr}api/category`,
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         data: `{"id": "${id}", "title": "${name}"}`,
@@ -324,7 +324,7 @@ function updateCategory(id, name){
               $.ajax(
                   {
                       type: 'GET',
-                      url: `http://localhost:5000/api/comments/${id}`,
+                      url: `${constr}api/comments/${id}`,
                       dataType: "json",
                       success: function (data, textStatus) {
                           let cat = "";
@@ -345,7 +345,7 @@ function updateCategory(id, name){
                   
 
           })
-          let hubUrl = 'http://localhost:5000/authchat'; //ссылка, по которому будем обращаться к хабу
+          let hubUrl = `${constr}authchat`; //ссылка, по которому будем обращаться к хабу
           validateToken()
           let connection = new signalR.HubConnectionBuilder()  //строим соединение с хабом
               .withUrl(hubUrl,  { accessTokenFactory: () => sessionStorage.getItem('accesstoken') })                      // в нашем случае будет использована технология web-socket
@@ -371,7 +371,7 @@ function updateCategory(id, name){
               $.ajax(
                   {
                       type: 'POST',
-                      url: 'http://localhost:5000/api/chat/sendcommentauth',
+                      url: `${constr}api/chat/sendcommentauth`,
                       dataType: "json",
                       contentType: "application/json; charset=utf-8",
                       beforeSend: function (request) {
@@ -391,7 +391,7 @@ function updateCategory(id, name){
               $.ajax(
                   {
                       type: 'GET',
-                      url: 'http://localhost:5000/api/product',
+                      url: `${constr}api/product`,
                       dataType: "json",
                       success: function (data, textStatus) {
                           let products = "";
@@ -407,7 +407,7 @@ function updateCategory(id, name){
               $.ajax(
                   {
                       type: 'GET',
-                      url: `http://localhost:5000/api/product/category/${id}`,
+                      url: `${constr}api/product/category/${id}`,
                       dataType: "json",
                       success: function (data, textStatus) {
                           let products = "";
@@ -422,7 +422,7 @@ function updateCategory(id, name){
           function createProduct(name, description, price, categoryId) {
               $.ajax({
                   type: 'POST',
-                  url: 'http://localhost:5000/api/product',
+                  url: `${constr}api/product`,
                   dataType: "json",
                   contentType: "application/json; charset=utf-8",
                   data: `{"name": "${name}", "description": "${description}",
@@ -445,7 +445,7 @@ function updateCategory(id, name){
           function deleteProduct(id) {
               $.ajax({
                   type: 'Delete',
-                  url: `http://localhost:5000/api/product/${id}`,
+                  url: `${constr}api/product/${id}`,
                   dataType: "json",
                   contentType: "application/json; charset=utf-8",
                   data: `{"id": "${id}"}`,
@@ -467,7 +467,7 @@ function updateCategory(id, name){
           function updateProduct(id, name, description, price, categoryId) {
               $.ajax({
                   method: 'Put',
-                  url: `http://localhost:5000/api/product`,
+                  url: `${constr}api/product`,
                   dataType: "json",
                   contentType: "application/json; charset=utf-8",
                   data: `{"id": "${id}", "name": "${name}", "price":${parseInt(price)},
@@ -552,7 +552,7 @@ function updateCategory(id, name){
           $('#exit').click(function () {
               console.log("exit");
               sessionStorage.removeItem("accesstoken");
-              document.location.href = "http://localhost:5000/firstPage.html";
+              document.location.href = `${constr}firstPage.html`;
           })
 
           $('#content').delegate("#updateProduct", "click", function () {
