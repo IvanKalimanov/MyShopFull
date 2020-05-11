@@ -12,7 +12,7 @@
       <div class="container-fluid">
           <div class="row">
               <div class="col bg-dark text-white">
-                  <a class="navbar-brand" href="http://130.193.48.28/firstPage.html">My Shop</a>
+                  <a class="navbar-brand" href="firstPage.html">My Shop</a>
                   <a class="btn btn-primary float-right" href="login.html" id="logorReg">Войти</a>
               </div>
           </div>
@@ -49,7 +49,7 @@
 
           function card(id, name, description, price) {
               return `<div class="card col-3 mx-4 my-2" style="width:100%" ">
-              <img class="card-img-top mt-2" src="img/photo.jpg" alt="Card image" style="width:100%">
+              <img class="card-img-top mt-2" src="img/photo.JPG" alt="Card image" style="width:100%">
               <div class="card-body">
                   <h4 class="card-title">${name}</h4>
                   <p class="card-text">${description}</p>
@@ -228,7 +228,26 @@
                   });
           });</script>
       <script>
-           
+          function getAllCategories()
+          {      
+              $.ajax(
+                  {
+                      type: 'GET',
+                      url: `${constr}api/category`,
+                      dataType : "json", 
+                      success: function (data, textStatus)
+                      { 
+                          let cat = "";
+                          data.forEach(function(item)
+                          {
+                              cat = cat + category(item.id, item.title);
+                          });
+                          $('#category').html(cat);
+                      } 
+                  });
+    
+          }; 
+
           function getAllProducts() {
               $.ajax(
                   {

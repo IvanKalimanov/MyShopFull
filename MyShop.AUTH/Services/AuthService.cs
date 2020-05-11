@@ -123,8 +123,8 @@ namespace MyShop.AUTH.Services
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(item);
             EmailService emailService = new EmailService();
-            string text = "Подтвердите регистрацию, перейдя по ссылке: <a href='http://localhost:5000/confirmation.html?conftoken=" + code+ "#"+item.Id+"'>link</a>";
-            await emailService.SendEmailAsync("ikalimanov@mail.ru", "Confirm your account", text);
+            string text = "Подтвердите регистрацию, перейдя по ссылке: <a href='http://130.193.48.28/confirmation.html?conftoken=" + code+ "#"+item.Id+"'>link</a>";
+            await emailService.SendEmailAsync(item.Email, "Confirm your account", text);
         }
 
         public async Task<Response<Token>> ConfirmEmail(string userId, string code)
